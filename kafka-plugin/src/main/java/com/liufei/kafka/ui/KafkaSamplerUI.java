@@ -84,7 +84,7 @@ public class KafkaSamplerUI extends AbstractSamplerGui {
     }
 
     public void modifyTestElement(TestElement testElement) {
-        // 这个方法用于把界面的数据移到Sampler中，刚好与上面的方法相反。在调用自己的实现方法之前，请先调用一下super.configureTestElement(e)，这个会帮助移到一些缺省的数据。
+        // 这个方法用于把界面的数据移到Sampler中，刚好与上面的方法相反。在调用自己的实现方法之前，请先调用一下super.configureTestElement(e)，这个会帮助移到一些缺省的数据
     }
 
     @Override
