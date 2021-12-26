@@ -37,7 +37,8 @@ public class KafkaSamplerUI extends AbstractSamplerGui {
         log.info("Initializing kafka UI...");
         setLayout(new BorderLayout());
         setBorder(makeBorder());
-
+        // 初始化默认值
+        initDefaultValue();
         add(makeTitlePanel(), BorderLayout.NORTH);
         // 垂直面板
         JPanel mainPanel = new VerticalPanel();
@@ -47,7 +48,6 @@ public class KafkaSamplerUI extends AbstractSamplerGui {
         DPanel.setLayout(new GridLayout(3, 2));
         DPanel.add(brokersField);
         DPanel.add(topicField);
-        //DPanel.add(keyField);
         DPanel.add(messageSerializerField);
         DPanel.add(keySerializerField);
 
@@ -66,10 +66,20 @@ public class KafkaSamplerUI extends AbstractSamplerGui {
     }
 
 
+    private void initDefaultValue() {
+        this.brokersField.setText("kafka_server:9092");
+        this.topicField.setText("jmeterTest");
+        this.messageSerializerField.setText("kafka.serializer.StringEncoder");
+        this.keySerializerField.setText("kafka.serializer.StringEncoder");
+        this.textMessage.setText("");
+    }
+
+    @Override
     public String getLabelResource() {
         throw new IllegalStateException("This shouldn't be called");
     }
 
+    @Override
     public TestElement createTestElement() {
         // 该方法创建一个新的Sampler，然后将界面中的数据设置到这个新的Sampler实例中。
         KafkaSampler sampler = new KafkaSampler();
@@ -81,10 +91,19 @@ public class KafkaSamplerUI extends AbstractSamplerGui {
     public void configure(TestElement element) {
         // 该方法用于把Sampler中的数据加载到界面中。在实现自己的逻辑之前，先调用一下父类的方法super.configure(el)，这样可以确保框架自动为你加载一些缺省数据，比如Sampler的名字。
         super.configure(element);
+        KafkaSampler sampler = (KafkaSampler)element;
+        this.brokersField.setText(sampler.getBrokers());
+        this.topicField.setText(sampler.getTopic());
+        this.messageSerializerField.setText(sampler.getMessageSerializer());
+        this.keySerializerField.setText(sampler.getKeySerializer());
+        this.textMessage.setText(sampler.getMessage());
     }
 
+    @Override
     public void modifyTestElement(TestElement testElement) {
         // 这个方法用于把界面的数据移到Sampler中，刚好与上面的方法相反。在调用自己的实现方法之前，请先调用一下super.configureTestElement(e), 这个会帮助移到一些缺省的数据
+        KafkaSampler sampler = (KafkaSampler) testElement;
+        this.setupSamplerProperties(sampler);
     }
 
     @Override
@@ -97,7 +116,6 @@ public class KafkaSamplerUI extends AbstractSamplerGui {
         this.configureTestElement(sampler);
         sampler.setBrokers(this.brokersField.getText());
         sampler.setTopic(this.topicField.getText());
-        //sampler.setKey(this.keyField.getText());
         sampler.setMessage(this.textMessage.getText());
         sampler.setMessageSerializer(this.messageSerializerField.getText());
         sampler.setKeySerializer(this.keySerializerField.getText());

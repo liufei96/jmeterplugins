@@ -1,7 +1,7 @@
 package com.liufei.kafka;
 
+import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
-import kafka.producer.Producer;
 import kafka.producer.ProducerConfig;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
@@ -9,7 +9,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-import scala.collection.Seq;
 
 import java.text.MessageFormat;
 import java.util.Properties;
@@ -22,7 +21,6 @@ public class KafkaSampler extends AbstractSampler implements TestStateListener {
     private static final long serialVersionUID = 1L;
     private static final String KAFKA_BROKERS = "kafka.brokers";
     private static final String KAFKA_TOPIC = "kafka.topic";
-    //private static final String KAFKA_KEY = "kafka.key";
     private static final String KAFKA_MESSAGE = "kafka.message";
     private static final String KAFKA_MESSAGE_SERIALIZER = "kafka.message.serializer";
     private static final String KAFKA_KEY_SERIALIZER = "kafka.key.serializer";
@@ -33,6 +31,7 @@ public class KafkaSampler extends AbstractSampler implements TestStateListener {
         setName("Kafka sampler");
     }
 
+    @Override
     public SampleResult sample(Entry entry) {
         SampleResult result = new SampleResult();
         result.setSampleLabel(getName());
@@ -40,7 +39,7 @@ public class KafkaSampler extends AbstractSampler implements TestStateListener {
             result.sampleStart();
             Producer<String, String> producer = getProducer();
             KeyedMessage<String, String> msg = new KeyedMessage<>(getTopic(), getMessage());
-            producer.send((Seq<KeyedMessage<String, String>>) msg);
+            producer.send(msg);
             result.sampleEnd();
             result.setSuccessful(true);
             result.setResponseCodeOK();
@@ -114,18 +113,22 @@ public class KafkaSampler extends AbstractSampler implements TestStateListener {
         setProperty(KAFKA_KEY_SERIALIZER, keySerializer);
     }
 
+    @Override
     public void testStarted() {
 
     }
 
+    @Override
     public void testStarted(String s) {
 
     }
 
+    @Override
     public void testEnded() {
         this.testEnded("local");
     }
 
+    @Override
     public void testEnded(String s) {
 
     }
