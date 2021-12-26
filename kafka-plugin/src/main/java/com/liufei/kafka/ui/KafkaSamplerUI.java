@@ -45,11 +45,11 @@ public class KafkaSamplerUI extends AbstractSamplerGui {
         add(mainPanel, BorderLayout.CENTER);
 
         JPanel DPanel = new JPanel();
-        DPanel.setLayout(new GridLayout(3, 2));
+        DPanel.setLayout(new GridLayout(1, 2));
         DPanel.add(brokersField);
         DPanel.add(topicField);
-        DPanel.add(messageSerializerField);
-        DPanel.add(keySerializerField);
+        //DPanel.add(messageSerializerField);
+        //DPanel.add(keySerializerField);
 
         JPanel ControlPanel = new VerticalPanel();
         ControlPanel.add(DPanel);
